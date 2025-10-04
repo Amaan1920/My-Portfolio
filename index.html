@@ -125,8 +125,10 @@
     <!-- Header & Navigation -->
     <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <!-- Logo updated to match user's initials -->
-            <a href="#home" class="text-xl font-bold text-slate-800">AA</a>
+            <!-- Logo updated to an image -->
+            <a href="#home">
+                <img src="https://placehold.co/40x40/4f46e5/ffffff?text=AA&font=inter" alt="Aman Ali Logo" class="h-10 w-10 rounded-full">
+            </a>
             <nav id="main-nav" class="hidden md:flex space-x-8">
                 <a href="#about" class="text-slate-600 hover:text-indigo-600 transition duration-300">About</a>
                 <a href="#skills" class="text-slate-600 hover:text-indigo-600 transition duration-300">Skills</a>
@@ -174,7 +176,7 @@
                     <a href="#projects" class="inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg">
                         View My Work
                     </a>
-                    <a href="https://drive.google.com/file/d/1Pe0BmqidX2uOUYx1LBmUeSDdgGCF2fnq/view?usp=sharing" target="_blank" class="inline-block bg-white text-indigo-600 font-bold py-3 px-8 rounded-lg text-lg hover:bg-slate-100 transition duration-300 transform hover:scale-105 shadow-lg border-2 border-indigo-600">
+                    <a href="https://drive.google.com/file/d/1jtDctLDb_YB5BihWyvsjSyEIKhMm21qI/view?usp=sharing" class="inline-block bg-white text-indigo-600 font-bold py-3 px-8 rounded-lg text-lg hover:bg-slate-100 transition duration-300 transform hover:scale-105 shadow-lg border-2 border-indigo-600">
                         Download Resume
                     </a>
                 </div>
@@ -187,8 +189,8 @@
                 <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">About Me</h2>
                 <div class="flex flex-col md:flex-row items-center gap-12">
                     <div class="md:w-1/3">
-                        <!-- Replaced local image with a placeholder for reliable preview -->
-                        <img src="https://placehold.co/320x320/e0e7ff/4f46e5?text=Aman+Ali&font=inter" alt="A portrait of Aman Ali" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover">
+                        <!-- Replaced placeholder with your uploaded image -->
+                        <img src="Headshot2.jpg" alt="A portrait of Aman Ali" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover">
                     </div>
                     <div class="md:w-2/3 text-center md:text-left">
                         <p class="text-lg text-slate-600 leading-relaxed">
@@ -280,6 +282,7 @@
                     
                     <!-- Project 1: Github User Finder -->
                     <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=600&auto=format&fit=crop" alt="Github logo on a laptop screen" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-slate-800 mb-2">Github-User-Finder</h3>
                             <p class="text-slate-600 mb-4">An application to search for GitHub users and view their profile details and repositories using the GitHub API.</p>
@@ -295,6 +298,7 @@
 
                     <!-- Project 2: E-Commerce Website -->
                     <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=600&auto=format&fit=crop" alt="Woman holding shopping bags" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-slate-800 mb-2">E-Commerce Website</h3>
                             <p class="text-slate-600 mb-4">A responsive and user-friendly e-commerce web application built using React, HTML ,CSS, and Javascript. The platform allows users to browse products, view detailed product information, add items to the cart, and manage their purchases. Designed with clean UI and smooth navigation, it ensures a seamless online shopping experience.</p>
@@ -310,6 +314,7 @@
                     
                     <!-- Project 3: Weather App -->
                     <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                        <img src="https://images.unsplash.com/photo-1592210454359-9043f067919b?q=80&w=600&auto=format&fit=crop" alt="Dramatic sky with sun and clouds" class="w-full h-48 object-cover">
                         <div class="p-6">
                             <h3 class="text-xl font-bold text-slate-800 mb-2">Weather Forecasting Web Application</h3>
                             <p class="text-slate-600 mb-4">A web application that provides real-time weather forecasts. Users can search for a location to get current conditions, temperature, humidity, and wind speed.</p>
@@ -387,6 +392,8 @@
                         </button>
                     </div>
                 </form>
+                <!-- Status message for the form -->
+                <div id="form-status" class="mt-6 text-center"></div>
             </div>
         </section>
     </main>
@@ -489,6 +496,41 @@
             });
             toTopBtn.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            // --- Contact Form Submission ---
+            const form = document.querySelector('#contact form');
+            const formStatus = document.getElementById('form-status');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const formData = new FormData(form);
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                }).then(response => {
+                    if (response.ok) {
+                        formStatus.textContent = "Thanks for your message! I'll get back to you soon.";
+                        formStatus.className = 'mt-6 text-center text-green-600';
+                        form.reset();
+                    } else {
+                        response.json().then(data => {
+                            if (Object.hasOwn(data, 'errors')) {
+                                formStatus.textContent = data["errors"].map(error => error["message"]).join(", ");
+                            } else {
+                                formStatus.textContent = 'Oops! There was a problem submitting your form.';
+                            }
+                            formStatus.className = 'mt-6 text-center text-red-600';
+                        });
+                    }
+                }).catch(error => {
+                    formStatus.textContent = 'Oops! There was a problem submitting your form.';
+                    formStatus.className = 'mt-6 text-center text-red-600';
+                });
             });
         });
     </script>
