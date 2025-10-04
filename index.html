@@ -11,13 +11,71 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Favicon Generated -->
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%234f46e5'%3E%3C/rect%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-size='50' font-family='Inter, sans-serif' font-weight='bold' fill='white'%3EAA%3C/text%3E%3C/svg%3E">
+    <script>
+        // Set theme on initial load
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+    </script>
     <style>
         /* Custom styles for animations and base settings */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #f8fafc; /* slate-50 */
             color: #334155; /* slate-700 */
+            cursor: none; /* Hide the default cursor */
         }
+        .dark body {
+            background-color: #0f172a; /* slate-900 */
+            color: #cbd5e1; /* slate-300 */
+        }
+        
+        /* --- Custom Cursor --- */
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4f46e5;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: width 0.3s, height 0.3s, background-color 0.3s;
+        }
+
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #4f46e5;
+            border-radius: 50%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.3s ease-out;
+        }
+
+        body:has(a:hover, button:hover) .cursor-dot {
+            background-color: rgba(79, 70, 229, 0.5);
+        }
+        
+        body:has(a:hover, button:hover) .cursor-outline {
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(79, 70, 229, 0.5);
+        }
+        
+        .dark .cursor-dot { background-color: #818cf8; }
+        .dark .cursor-outline { border-color: #818cf8; }
+        .dark body:has(a:hover, button:hover) .cursor-dot { background-color: rgba(129, 140, 248, 0.5); }
+        .dark body:has(a:hover, button:hover) .cursor-outline { border-color: rgba(129, 140, 248, 0.5); }
+
 
         /* Custom text selection color */
         ::selection {
@@ -30,6 +88,10 @@
             background: linear-gradient(-45deg, #e0e7ff, #c7d2fe, #a5b4fc, #818cf8);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
+        }
+        .dark #home {
+             background: linear-gradient(-45deg, #1e293b, #334155, #475569, #1e293b);
+             background-size: 400% 400%;
         }
 
         @keyframes gradientBG {
@@ -56,6 +118,18 @@
                 opacity: 1;
                 transform: translateY(0);
             }
+        }
+        
+        /* --- Gradient Text --- */
+        .gradient-text {
+            background: linear-gradient(to right, #4f46e5, #312e81);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .dark .gradient-text {
+             background: linear-gradient(to right, #c7d2fe, #eef2ff); /* Brighter gradient for dark mode */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* --- Scroll Reveal Animation --- */
@@ -85,6 +159,12 @@
             height: 4px;
             background-color: #4f46e5; /* indigo-600 */
             border-radius: 2px;
+            transition: width 0.3s;
+        }
+        .dark .section-title::after { background-color: #818cf8; }
+        
+        .section-title:hover::after {
+            width: 80px;
         }
         
         /* --- Active Nav Link --- */
@@ -92,6 +172,8 @@
             color: #4f46e5; /* indigo-600 */
             font-weight: 700;
         }
+        .dark nav a.active { color: #a5b4fc; }
+
 
         /* --- Back to Top Button --- */
         #to-top-btn {
@@ -110,49 +192,84 @@
             cursor: pointer;
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
             transform: translateY(20px);
         }
+        #to-top-btn:hover {
+            box-shadow: 0 0 15px rgba(79, 70, 229, 0.7);
+            transform: scale(1.1);
+        }
+        .dark #to-top-btn { background-color: #6366f1; }
+        .dark #to-top-btn:hover { box-shadow: 0 0 15px rgba(99, 102, 241, 0.7); }
+
         #to-top-btn.show {
             display: flex;
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* --- Interactive Card Tilt Effect --- */
+        .interactive-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            will-change: transform;
+        }
+        .interactive-card:hover {
+             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.2);
+        }
+        .dark .interactive-card:hover {
+             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        /* --- Footer Social Icon Hover --- */
+        .social-icon:hover {
+            transform: scale(1.2);
+            color: #a5b4fc;
+        }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased transition-colors duration-500">
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
 
     <!-- Header & Navigation -->
-    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm">
+    <header class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-sm dark:bg-slate-900/80 dark:shadow-slate-800 transition-colors duration-500">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <!-- Logo updated to an image -->
             <a href="#home">
                 <img src="https://placehold.co/40x40/4f46e5/ffffff?text=AA&font=inter" alt="Aman Ali Logo" class="h-10 w-10 rounded-full">
             </a>
-            <nav id="main-nav" class="hidden md:flex space-x-8">
-                <a href="#about" class="text-slate-600 hover:text-indigo-600 transition duration-300">About</a>
-                <a href="#skills" class="text-slate-600 hover:text-indigo-600 transition duration-300">Skills</a>
-                <a href="#projects" class="text-slate-600 hover:text-indigo-600 transition duration-300">Projects</a>
-                <a href="#credentials" class="text-slate-600 hover:text-indigo-600 transition duration-300">Credentials</a>
-                <a href="#contact" class="text-slate-600 hover:text-indigo-600 transition duration-300">Contact</a>
-            </nav>
-            <a href="#contact" class="hidden md:inline-block bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
-                Hire Me
-            </a>
+            <div class="flex items-center space-x-8">
+                <nav id="main-nav" class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition duration-300">About</a>
+                    <a href="#skills" class="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition duration-300">Skills</a>
+                    <a href="#projects" class="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition duration-300">Projects</a>
+                    <a href="#credentials" class="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition duration-300">Credentials</a>
+                    <a href="#contact" class="text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400 transition duration-300">Contact</a>
+                </nav>
+                <a href="#contact" class="hidden md:inline-block bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-500 transition duration-300 shadow-md hover:shadow-lg hover:scale-105">
+                    Hire Me
+                </a>
+                <!-- Dark Mode Toggle Button -->
+                <button id="theme-toggle" type="button" class="text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 focus:outline-none focus:ring-4 focus:ring-slate-200 dark:focus:ring-slate-700 rounded-lg text-sm p-2.5">
+                    <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                </button>
+            </div>
             <!-- Mobile Menu Button -->
-            <button id="mobile-menu-button" class="md:hidden text-slate-800">
+            <button id="mobile-menu-button" class="md:hidden text-slate-800 dark:text-slate-200">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
                 </svg>
             </button>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#about" class="block py-2 text-slate-600 hover:text-indigo-600">About</a>
-            <a href="#skills" class="block py-2 text-slate-600 hover:text-indigo-600">Skills</a>
-            <a href="#projects" class="block py-2 text-slate-600 hover:text-indigo-600">Projects</a>
-            <a href="#credentials" class="block py-2 text-slate-600 hover:text-indigo-600">Credentials</a>
-            <a href="#contact" class="block py-2 text-slate-600 hover:text-indigo-600">Contact</a>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4 dark:bg-slate-900/80">
+            <a href="#about" class="block py-2 text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">About</a>
+            <a href="#skills" class="block py-2 text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">Skills</a>
+            <a href="#projects" class="block py-2 text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">Projects</a>
+            <a href="#credentials" class="block py-2 text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">Credentials</a>
+            <a href="#contact" class="block py-2 text-slate-600 hover:text-indigo-600 dark:text-slate-300 dark:hover:text-indigo-400">Contact</a>
             <a href="#contact" class="block mt-2 bg-indigo-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300 text-center">
                 Hire Me
             </a>
@@ -163,20 +280,20 @@
         <!-- Hero Section -->
         <section id="home" class="min-h-screen flex items-center">
             <div class="container mx-auto px-6 text-center">
-                <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight fade-in-up">
+                <h1 class="text-4xl md:text-6xl font-bold text-slate-800 leading-tight fade-in-up gradient-text">
                     Hi, I'm Aman
                 </h1>
-                <p class="text-lg md:text-2xl text-indigo-700 font-medium mt-4 fade-in-up fade-in-up-delay-1">
+                <p class="text-lg md:text-2xl text-indigo-700 font-medium mt-4 fade-in-up fade-in-up-delay-1 dark:text-indigo-400">
                     A Passionate .NET Developer
                 </p>
-                <p class="mt-6 max-w-2xl mx-auto text-slate-600 fade-in-up fade-in-up-delay-2">
+                <p class="mt-6 max-w-2xl mx-auto text-slate-600 fade-in-up fade-in-up-delay-2 dark:text-slate-400">
                     Specialized in building modern, responsive, and user-friendly web applications using .NET Core, C#, ASP.NET MVC, Entity Framework, SQL Server, and front-end technologies like Angular, React, JavaScript, and Bootstrap.
                 </p>
                 <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4 fade-in-up fade-in-up-delay-3">
-                    <a href="#projects" class="inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg">
+                    <a href="#projects" class="inline-block bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-indigo-700 transition duration-300 transform hover:scale-105 shadow-lg hover:shadow-indigo-400/50 dark:hover:shadow-indigo-500/50">
                         View My Work
                     </a>
-                    <a href="https://drive.google.com/file/d/1jtDctLDb_YB5BihWyvsjSyEIKhMm21qI/view?usp=sharing" class="inline-block bg-white text-indigo-600 font-bold py-3 px-8 rounded-lg text-lg hover:bg-slate-100 transition duration-300 transform hover:scale-105 shadow-lg border-2 border-indigo-600">
+                    <a href="https://drive.google.com/file/d/1jtDctLDb_YB5BihWyvsjSyEIKhMm21qI/view?usp=sharing" class="inline-block bg-white text-indigo-600 font-bold py-3 px-8 rounded-lg text-lg hover:bg-slate-100 transition duration-300 transform hover:scale-105 shadow-lg border-2 border-indigo-600 dark:bg-slate-800 dark:text-indigo-300 dark:border-indigo-500 dark:hover:bg-slate-700 hover:shadow-indigo-400/50 dark:hover:shadow-indigo-500/50">
                         Download Resume
                     </a>
                 </div>
@@ -184,19 +301,18 @@
         </section>
 
         <!-- About Me Section -->
-        <section id="about" class="py-20 bg-white reveal">
+        <section id="about" class="py-20 bg-white dark:bg-slate-900 reveal transition-colors duration-500">
             <div class="container mx-auto px-6">
-                <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">About Me</h2>
+                <h2 class="section-title text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">About Me</h2>
                 <div class="flex flex-col md:flex-row items-center gap-12">
                     <div class="md:w-1/3">
-                        <!-- Image link updated to a working direct link -->
-                        <img src="https://iili.io/KWZV3sj.jpg" alt="A portrait of Aman Ali" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover">
+                        <img src="https://iili.io/KWZV3sj.jpg" alt="A portrait of Aman Ali" class="rounded-full shadow-2xl mx-auto w-64 h-64 md:w-80 md:h-80 object-cover interactive-card">
                     </div>
                     <div class="md:w-2/3 text-center md:text-left">
-                        <p class="text-lg text-slate-600 leading-relaxed">
+                        <p class="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                             I’m a passionate and motivated .NET web developer based in New Delhi, eager to transform ideas into scalable, responsive, and user-friendly applications. With a solid foundation in C#, .NET Core, ASP.NET MVC, Entity Framework, and SQL Server, along with front-end technologies like HTML, CSS, JavaScript, Bootstrap, and React/Angular, I’m constantly learning and improving to stay aligned with modern development practices.
                         </p>
-                        <p class="mt-4 text-lg text-slate-600 leading-relaxed">
+                        <p class="mt-4 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
                             I enjoy designing clean architectures, building robust APIs, and delivering solutions that solve real-world problems. My goal is to grow as a full-stack developer, contribute to impactful projects, and bring innovative ideas to life using the .NET ecosystem.
                         </p>
                     </div>
@@ -205,64 +321,64 @@
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20 bg-slate-50 reveal">
+        <section id="skills" class="py-20 bg-slate-50 dark:bg-slate-800 reveal transition-colors duration-500">
             <div class="container mx-auto px-6">
-                <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">Core Competencies</h2>
+                <h2 class="section-title text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">Core Competencies</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
                     
-                    <div class="bg-white p-6 rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Programming & Development</h3>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-lg interactive-card transition-colors duration-500">
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">Programming & Development</h3>
                         <div class="space-y-4">
                             <div>
-                                <h4 class="font-semibold text-indigo-600">Languages</h4>
-                                <p class="text-slate-600">C, C#, Javascript</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Languages</h4>
+                                <p class="text-slate-600 dark:text-slate-400">C, C#, Javascript</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-indigo-600">Frontend</h4>
-                                <p class="text-slate-600">HTML5, CSS3, JavaScript (ES6+), React, Angular , Tailwind CSS, Bootstrap</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Frontend</h4>
+                                <p class="text-slate-600 dark:text-slate-400">HTML5, CSS3, JavaScript (ES6+), React, Angular , Tailwind CSS, Bootstrap</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-indigo-600">Backend</h4>
-                                <p class="text-slate-600">ASP.NET, MVC, REST APIs, Entity Framework</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Backend</h4>
+                                <p class="text-slate-600 dark:text-slate-400">ASP.NET, MVC, REST APIs, Entity Framework</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-indigo-600">Databases</h4>
-                                <p class="text-slate-600">MySQL, PostgreSQL, SQL Server (schema design, queries, optimization)</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Databases</h4>
+                                <p class="text-slate-600 dark:text-slate-400">MySQL, PostgreSQL, SQL Server (schema design, queries, optimization)</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Tools & Platforms</h3>
-                        <div class="space-y-4">
-                             <div>
-                                <h4 class="font-semibold text-indigo-600">Development Tools</h4>
-                                <p class="text-slate-600">Visual Studio, VS Code, Git & GitHub, Postman</p>
-                            </div>
-                            <div>
-                                <h4 class="font-semibold text-indigo-600">Key Concepts</h4>
-                                <p class="text-slate-600">Responsive Web Design, Cross-Browser Compatibility, AI Tools for Development</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Certifications & Training</h3>
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-lg interactive-card transition-colors duration-500">
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">Tools & Platforms</h3>
                         <div class="space-y-4">
                              <div>
-                                <h4 class="font-semibold text-indigo-600">Web Development Fundamentals</h4>
-                                <p class="text-slate-600">HTML5, CSS3, JavaScript, React, Angular , Tailwind CSS — including AI Tools Workshops.</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Development Tools</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Visual Studio, VS Code, Git & GitHub, Postman</p>
                             </div>
                             <div>
-                                <h4 class="font-semibold text-indigo-600">.NET Full Stack Development (In Progress)</h4>
-                                <p class="text-slate-600">Focus on C#, ASP.NET, MVC, SQL Server, Entity Framework, and front-end integration.</p>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Key Concepts</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Responsive Web Design, Cross-Browser Compatibility, AI Tools for Development</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-6 rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2">
-                        <h3 class="text-2xl font-bold text-slate-800 mb-4">Soft Skills</h3>
-                        <ul class="list-disc list-inside text-slate-600 space-y-2">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-lg interactive-card transition-colors duration-500">
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">Certifications & Training</h3>
+                        <div class="space-y-4">
+                             <div>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">Web Development Fundamentals</h4>
+                                <p class="text-slate-600 dark:text-slate-400">HTML5, CSS3, JavaScript, React, Angular , Tailwind CSS — including AI Tools Workshops.</p>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-indigo-600 dark:text-indigo-400">.NET Full Stack Development (In Progress)</h4>
+                                <p class="text-slate-600 dark:text-slate-400">Focus on C#, ASP.NET, MVC, SQL Server, Entity Framework, and front-end integration.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-lg shadow-lg interactive-card transition-colors duration-500">
+                        <h3 class="text-2xl font-bold text-slate-800 dark:text-white mb-4">Soft Skills</h3>
+                        <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-2">
                             <li>Communication & Team Collaboration</li>
                             <li>Analytical Problem-Solving & Critical Thinking</li>
                             <li>Adaptability in Dynamic Environments</li>
@@ -275,56 +391,56 @@
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="py-20 bg-white reveal">
+        <section id="projects" class="py-20 bg-white dark:bg-slate-900 reveal transition-colors duration-500">
             <div class="container mx-auto px-6">
-                <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">My Projects</h2>
+                <h2 class="section-title text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">My Projects</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     
                     <!-- Project 1: Github User Finder -->
-                    <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden interactive-card transition-colors duration-500">
                         <img src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?q=80&w=600&auto=format&fit=crop" alt="Github logo on a laptop screen" class="w-full h-48 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Github-User-Finder</h3>
-                            <p class="text-slate-600 mb-4">An application to search for GitHub users and view their profile details and repositories using the GitHub API.</p>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Github-User-Finder</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">An application to search for GitHub users and view their profile details and repositories using the GitHub API.</p>
                             <div class="mb-4">
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">HTML</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">CSS</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">JavaScript</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">GitHub API</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">HTML</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">CSS</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">JavaScript</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">GitHub API</span>
                             </div>
-                            <a href="https://amaan1920.github.io/GitHub-User-Finder/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">View Project &rarr;</a>
+                            <a href="https://amaan1920.github.io/GitHub-User-Finder/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-300">View Project &rarr;</a>
                         </div>
                     </div>
 
                     <!-- Project 2: E-Commerce Website -->
-                    <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden interactive-card transition-colors duration-500">
                         <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=600&auto=format&fit=crop" alt="Woman holding shopping bags" class="w-full h-48 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">E-Commerce Website</h3>
-                            <p class="text-slate-600 mb-4">A responsive and user-friendly e-commerce web application built using React, HTML ,CSS, and Javascript. The platform allows users to browse products, view detailed product information, add items to the cart, and manage their purchases. Designed with clean UI and smooth navigation, it ensures a seamless online shopping experience.</p>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">E-Commerce Website</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">A responsive and user-friendly e-commerce web application built using React, HTML ,CSS, and Javascript. The platform allows users to browse products, view detailed product information, add items to the cart, and manage their purchases. Designed with clean UI and smooth navigation, it ensures a seamless online shopping experience.</p>
                             <div class="mb-4">
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">React</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">Html</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">CSS</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">JavaScript</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">React</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">Html</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">CSS</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">JavaScript</span>
                             </div>
-                            <a href="https://amaan1920.github.io/open-cart/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">View Project &rarr;</a>
+                            <a href="https://amaan1920.github.io/open-cart/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-300">View Project &rarr;</a>
                         </div>
                     </div>
                     
                     <!-- Project 3: Weather App -->
-                    <div class="bg-slate-50 rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                    <div class="bg-slate-50 dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden interactive-card transition-colors duration-500">
                         <img src="https://images.unsplash.com/photo-1592210454359-9043f067919b?q=80&w=600&auto=format&fit=crop" alt="Dramatic sky with sun and clouds" class="w-full h-48 object-cover">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Weather Forecasting Web Application</h3>
-                            <p class="text-slate-600 mb-4">A web application that provides real-time weather forecasts. Users can search for a location to get current conditions, temperature, humidity, and wind speed.</p>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Weather Forecasting Web Application</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">A web application that provides real-time weather forecasts. Users can search for a location to get current conditions, temperature, humidity, and wind speed.</p>
                             <div class="mb-4">
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">HTML</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">CSS</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">JavaScript</span>
-                                <span class="inline-block bg-slate-200 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 mr-2 mb-2">Weather API</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">HTML</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">CSS</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">JavaScript</span>
+                                <span class="inline-block bg-slate-200 dark:bg-slate-700 rounded-full px-3 py-1 text-sm font-semibold text-slate-700 dark:text-slate-300 mr-2 mb-2">Weather API</span>
                             </div>
-                            <a href="https://mausam2025.netlify.app/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 transition duration-300">View Project &rarr;</a>
+                            <a href="https://mausam2025.netlify.app/" target="_blank" rel="noopener noreferrer" class="font-medium text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-300">View Project &rarr;</a>
                         </div>
                     </div>
 
@@ -333,29 +449,29 @@
         </section>
 
         <!-- Credentials Section -->
-        <section id="credentials" class="py-20 bg-slate-50 reveal">
+        <section id="credentials" class="py-20 bg-slate-50 dark:bg-slate-800 reveal transition-colors duration-500">
             <div class="container mx-auto px-6">
-                <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">My Credentials</h2>
+                <h2 class="section-title text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">My Credentials</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                     
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden interactive-card transition-colors duration-500">
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-slate-800 mb-4 text-center">Marksheets</h3>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-4 text-center">Marksheets</h3>
                             <div class="space-y-3">
-                                <a href="https://drive.google.com/file/d/1M8JgEhztVA2QF3bHwHeQKSw3Z23ho_cB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">10th Marksheet</a>
-                                <a href="https://drive.google.com/file/d/1L3Zo64yTTClEM_KAzyCYnRaLt5eDvkNr/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">12th Marksheet</a>
-                                <a href="https://drive.google.com/file/d/1fzfbmdzUVVEEXlxehFQd1iY5Cqs7BgLc/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">Graduation Marksheet</a>
-                                <a href="https://drive.google.com/file/d/1CUgpJH34zTJPnr3SpE6e0F99mIauw1pp/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">Masters Marksheet</a>
-                                <a href="https://drive.google.com/file/d/1vOxsdzVf_GJgzMpflJs4_z-oe4UDY4nI/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">PG Diploma Sem 1</a>
-                                <a href="https://drive.google.com/file/d/1vLL24PwCRuegp5rQRSUpbVnh4F3EeWFz/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 transition duration-300">PG Diploma Sem 2</a>
+                                <a href="https://drive.google.com/file/d/1M8JgEhztVA2QF3bHwHeQKSw3Z23ho_cB/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-600 transition duration-300">10th Marksheet</a>
+                                <a href="https://drive.google.com/file/d/1L3Zo64yTTClEM_KAzyCYnRaLt5eDvkNr/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-600 transition duration-300">12th Marksheet</a>
+                                <a href="https://drive.google.com/file/d/1fzfbmdzUVVEEXlxehFQd1iY5Cqs7BgLc/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-600 transition duration-300">Graduation Marksheet</a>
+                                <a href="https://drive.google.com/file/d/1CUgpJH34zTJPnr3SpE6e0F99mIauw1pp/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-slate-100 border border-slate-300 text-slate-700 font-medium py-2 px-4 rounded-lg hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600 dark:hover:bg-slate-600 transition duration-300">Masters Marksheet</a>
+                                <a href="https://drive.google.com/file/d/1vOxsdzVf_GJgzMpflJs4_z-oe4UDY4nI/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-indigo-100 border border-indigo-300 text-indigo-700 font-medium py-2 px-4 rounded-lg hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:border-indigo-700 dark:hover:bg-indigo-900 transition duration-300">PG Diploma Sem 1</a>
+                                <a href="https://drive.google.com/file/d/1vLL24PwCRuegp5rQRSUpbVnh4F3EeWFz/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="block w-full text-center bg-indigo-100 border border-indigo-300 text-indigo-700 font-medium py-2 px-4 rounded-lg hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:border-indigo-700 dark:hover:bg-indigo-900 transition duration-300">PG Diploma Sem 2</a>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden transition-transform duration-300 hover:-translate-y-2">
+                    <div class="bg-white dark:bg-slate-900 rounded-lg shadow-lg overflow-hidden interactive-card transition-colors duration-500">
                         <div class="p-6 text-center">
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Degree Certificate</h3>
-                            <p class="text-slate-600 mb-4">View my official degree certificate.</p>
+                            <h3 class="text-xl font-bold text-slate-800 dark:text-white mb-2">Degree Certificate</h3>
+                            <p class="text-slate-600 dark:text-slate-400 mb-4">View my official degree certificate.</p>
                             <a href="https://drive.google.com/file/d/1cEyxNLNLv_ntTw7Rczy30JFpqKIxUUSq/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-block bg-indigo-600 text-white font-medium py-2 px-6 rounded-lg hover:bg-indigo-700 transition duration-300 shadow-md">
                                 View
                             </a>
@@ -367,25 +483,24 @@
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="py-20 bg-white reveal">
+        <section id="contact" class="py-20 bg-white dark:bg-slate-900 reveal transition-colors duration-500">
             <div class="container mx-auto px-6">
-                <h2 class="section-title text-3xl font-bold text-center text-slate-800 mb-12">Get In Touch</h2>
-                <p class="text-center text-slate-600 mb-12 max-w-2xl mx-auto">Have a project in mind or just want to say hi? Feel free to send me a message. I'll get back to you as soon as possible.</p>
+                <h2 class="section-title text-3xl font-bold text-center text-slate-800 dark:text-white mb-12">Get In Touch</h2>
+                <p class="text-center text-slate-600 dark:text-slate-400 mb-12 max-w-2xl mx-auto">Have a project in mind or just want to say hi? Feel free to send me a message. I'll get back to you as soon as possible.</p>
                 
-                <!-- NEW, MORE RELIABLE FORM -->
                 <form action="https://formsubmit.co/mdamanali749@gmail.com" method="POST" class="max-w-xl mx-auto">
                     
                     <div class="mb-6">
-                        <label for="name" class="block mb-2 text-sm font-medium text-slate-700">Your Name</label>
-                        <input type="text" id="name" name="name" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="Aman Ali" required>
+                        <label for="name" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Your Name</label>
+                        <input type="text" id="name" name="name" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Aman Ali" required>
                     </div>
                     <div class="mb-6">
-                        <label for="email" class="block mb-2 text-sm font-medium text-slate-700">Your Email</label>
-                        <input type="email" id="email" name="email" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="aman.ali@example.com" required>
+                        <label for="email" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Your Email</label>
+                        <input type="email" id="email" name="email" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="aman.ali@example.com" required>
                     </div>
                     <div class="mb-6">
-                        <label for="message" class="block mb-2 text-sm font-medium text-slate-700">Your Message</label>
-                        <textarea id="message" name="message" rows="4" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3" placeholder="Your message here..." required></textarea>
+                        <label for="message" class="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">Your Message</label>
+                        <textarea id="message" name="message" rows="4" class="bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-3 dark:bg-slate-700 dark:border-slate-600 dark:placeholder-slate-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Your message here..." required></textarea>
                     </div>
                     <div class="text-center">
                         <button type="submit" class="bg-indigo-600 text-white font-bold py-3 px-8 rounded-lg text-lg hover:bg-indigo-700 transition duration-300 shadow-lg">
@@ -399,22 +514,20 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-800 text-white py-8">
+    <footer class="bg-slate-800 dark:bg-black/50 text-white py-8 transition-colors duration-500">
         <div class="container mx-auto px-6 text-center">
             <div class="flex justify-center space-x-6 mb-4">
-                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition duration-300">
+                <a href="https://github.com/" target="_blank" rel="noopener noreferrer" class="text-slate-400 dark:text-slate-300 hover:text-white dark:hover:text-white transition duration-300 social-icon">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.838 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.378.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg>
                 </a>
-                <a href="https://www.linkedin.com/in/md-aman-ali-3743332b0" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition duration-300">
+                <a href="https://www.linkedin.com/in/md-aman-ali-3743332b0" target="_blank" rel="noopener noreferrer" class="text-slate-400 dark:text-slate-300 hover:text-white dark:hover:text-white transition duration-300 social-icon">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                 </a>
-                <!-- Updated Twitter link -->
-                <a href="https://x.com/home" target="_blank" rel="noopener noreferrer" class="hover:text-indigo-400 transition duration-300">
+                <a href="https://x.com/home" target="_blank" rel="noopener noreferrer" class="text-slate-400 dark:text-slate-300 hover:text-white dark:hover:text-white transition duration-300 social-icon">
                     <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.71v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
                 </a>
             </div>
-            <!-- Updated copyright year -->
-            <p class="text-slate-400">&copy; 2025 Md Aman Ali. All Rights Reserved.</p>
+            <p class="text-slate-400 dark:text-slate-300">&copy; 2025 Md Aman Ali. All Rights Reserved.</p>
         </div>
     </footer>
 
@@ -427,6 +540,51 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // --- Custom Cursor ---
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorOutline = document.querySelector('.cursor-outline');
+            window.addEventListener('mousemove', function(e) {
+                const posX = e.clientX;
+                const posY = e.clientY;
+
+                cursorDot.style.left = `${posX}px`;
+                cursorDot.style.top = `${posY}px`;
+
+                cursorOutline.animate({
+                    left: `${posX}px`,
+                    top: `${posY}px`
+                }, { duration: 500, fill: "forwards" });
+            });
+            
+            // --- Dark Mode Toggle ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                    themeToggleLightIcon.classList.remove('hidden');
+                    themeToggleDarkIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    themeToggleDarkIcon.classList.remove('hidden');
+                    themeToggleLightIcon.classList.add('hidden');
+                    localStorage.setItem('theme', 'light');
+                }
+            }
+            
+            // Apply the theme immediately on load
+            const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(currentTheme);
+
+            themeToggleBtn.addEventListener('click', function() {
+                const isDark = document.documentElement.classList.contains('dark');
+                applyTheme(isDark ? 'light' : 'dark');
+            });
+
+
             // Mobile Menu Toggle
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -495,13 +653,28 @@
             toTopBtn.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+            
+            // --- Card Tilt Effect ---
+            const cards = document.querySelectorAll('.interactive-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
 
-            // NOTE: The JavaScript for form submission has been removed because the new service (FormSubmit)
-            // handles the submission and "Thank You" page automatically. No custom script is needed.
+                    const rotateX = -y / 20; // Adjust divisor for sensitivity
+                    const rotateY = x / 20;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+                });
+            });
         });
     </script>
 
 </body>
 </html>
-
 
